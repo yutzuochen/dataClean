@@ -35,8 +35,30 @@ def getVol(str):
     vol = str[44:53]    # Trade share
 
 
-def writeFile(lis):
-    f = open("D:\dataClean\clean\\filename.txt", "a")
-    f.writelines(lis)
+# 將 lists 寫入目標路徑中 
+def writeFile(lists, writeFilePath):
+    print("utilty util writeFile writeFile: ", writeFilePath)
+    f = open(writeFilePath, "a")
+    f.writelines(lists)
     f.close()
-    print("finish write")
+
+
+# def writeToFolder(lists, writeFilePath, targetFolder):
+#     f = open(writeFilePath, "a")
+#     f.writelines(lists)
+#     f.close()
+#     print("finish write")
+
+
+# 用來拿到 list 中含有目標股票的交易
+# targetStockCode  目標股票代碼的字串
+# list             一個檔案中的交易清單
+def getStock(targetStockCode, list):
+    res = []
+    for i in range(len(list)):
+        aTra = list[i]
+        codeInList = getCode(aTra)
+        if codeInList != targetStockCode:
+            continue
+        res.append(aTra)
+    return res
