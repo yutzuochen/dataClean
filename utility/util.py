@@ -60,5 +60,10 @@ def getStock(targetStockCode, list):
         codeInList = getCode(aTra)
         if codeInList != targetStockCode:
             continue
+        # 去掉盤後交易
+        if aTra[16:20] == "1430":
+            continue
         res.append(aTra)
+        
+        
     return res
