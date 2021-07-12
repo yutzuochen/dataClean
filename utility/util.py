@@ -1,6 +1,3 @@
-from typing import List
-
-
 def getInfoVar(str):
     date = str[:8]      # Date
     code = str[8:12]    # Security Code

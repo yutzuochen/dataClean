@@ -1,6 +1,6 @@
 from os import listdir
 from os.path import isfile, isdir, join
-from util import writeFile
+from writeFuc import writeFile
 from util import getStock
 
 # 指定要列出所有檔案的目錄
@@ -23,6 +23,7 @@ def readFolderAndWrite(folderPath, folderWant2Write, targetStock):
       # 將 filter 過的清單寫入目標 folder
       fileToWrite = folderWant2Write + "\\" + file + "_" + targetStock
       #print("readFolderAndWrite fileToWrite: ", fileToWrite)
+      print(stockList)
       writeFile(stockList, fileToWrite)
       f.close()
 

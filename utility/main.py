@@ -11,4 +11,4 @@ def filterAStock(dataFolder, folderWant2Write, tarGetStock):
     readFolderAndWrite(dataFolder, folderWant2Write, tarGetStock)
 
 
-#filterAStock(DataFolder, FolderWant2Write, TarGetStock)
+filterAStock(DataFolder, FolderWant2Write, TarGetStock)
