@@ -71,7 +71,7 @@ def filteToInfo_Json(list, abandonMinute):
         now = getTimeBySecond(aTra)
         # 放棄最後幾分鐘的交易
         if int(now) > lastFewMinute(abandonMinute):
-            logging.debug("abandon time, now, lastFewMinute : %s %s", int(now), lastFewMinute(abandonMinute))
+            #logging.debug("abandon time, now, lastFewMinute : %s %s", int(now), lastFewMinute(abandonMinute))
             break
         # 進入下個時段
         if int(now) > int(preTime):
@@ -84,8 +84,6 @@ def filteToInfo_Json(list, abandonMinute):
                 "lowPrice":lowPrice,
                 "vol":vol,
             }
-            logging.debug("now, info  2: %s , %s", now, info)
-            #print("now, info  1: ", now, info)
             info_json = json.dumps(info)
             jsonList.append(info_json +  "\n")
             # 資料重新歸零
@@ -110,6 +108,6 @@ def filteToInfo_Json(list, abandonMinute):
             }
     info_json = json.dumps(info)
     jsonList.append(info_json +  "\n")
-    logging.debug("now, info  2: %s , %s", now, info)
+    #logging.debug("now, info  2: %s , %s", now, info)
     #print("now, info  2: ", now, info)
     return jsonList
