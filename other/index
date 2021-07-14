@@ -1,14 +1,15 @@
 [ MFI ]
 
-TypicalPrice_1 = (今日最高價+今日最低價+今日收盤價) / 3
+TP_1 = (今日最高價 + 今日最低價 + 今日收盤價) / 3
 
-MoneyFlow = TypicalPrice * Volume
+MoneyFlow = TP * Volume
 
-if  TypicalPrice_1 > TypicalPrice_0:
+if  TP_1 > TP_0:
     P = 過去n日的正金錢流(Positive Money Flow)
 
-elif TypicalPrice_1 < TypicalPrice_0:
+elif TP_1 < TP_0:
     N = 過去n日的負金錢流(Negative Money Flow)
+
 
 MoneyRatio = P/N
 

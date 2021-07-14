@@ -29,13 +29,17 @@ def getTime(str):
 def getTimeBySecond(str):
     return str[16:22]   # Trade Time
 
-def getPrice(str):    
+def getPrice_str(str):    
     return str[37:44]   # Trade price
-    
-def getVol(str):
+
+def getPrice_float(str):    
+    return float(str[37:44])   # Trade price
+
+def getVol_str(str):
     return  str[44:53]    # Trade share
 
-
+def getVol_int(str):
+    return  int(str[44:53])
 
 # 用來拿到 list 中含有目標股票的交易
 # targetStockCode  目標股票代碼的字串
@@ -52,3 +56,7 @@ def getStock(targetStockCode, list):
             continue
         res.append(aTra)
     return res
+
+
+def lastFewMinute(abandonMinute):
+    return int(133000) - int(abandonMinute)
