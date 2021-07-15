@@ -46,10 +46,8 @@ def makeMFI(lis):
 
 
         infoList = filteToInfo(fList)
-        #print("infoList: ", infoList)
         # 將 filter 過的清單寫入目標 folder
         fileToWrite = folderWant2Write + "\\" + file + "_Info_" + tarGetStock
-        #print("readFolderAndWrite fileToWrite: ", fileToWrite)
         writeFile(infoList, fileToWrite)
         f.close()
 
@@ -85,9 +83,9 @@ def main(dataFolderPath, folderWant2Write, tarGetStock, nDay):
 
     # 打印結束時間
     t2 = datetime.datetime.now()
-    print("t1: ", t1)
-    print("t2: ", t2)
-    print("total cost time: ", t2-t1)
+    logging.info("t1: %s", t1)
+    logging.info("t2: %s", t2)
+    logging.info("total cost time: %s", t2-t1)
 
 
 

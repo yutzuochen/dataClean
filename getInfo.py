@@ -7,6 +7,7 @@ import logging
 
 TarGetStock = "2330"
 DataFolder = "D:\dataClean\clean\\" + TarGetStock + "\data"
+#FolderWant2Write = "D:\dataClean\clean\\" + TarGetStock + "\\timeInfo"
 FolderWant2Write = "D:\dataClean\clean\\" + TarGetStock + "\\timeInfo" 
 AbandonMinute = 5
 
@@ -17,9 +18,9 @@ def main(dataFolderPath, folderWant2Write, tarGetStock):
     # 產生檔案的絕對路徑
         fullpath = join(dataFolderPath, file)
     # 判斷 fullpath 是檔案還是目錄
-        print("fullpath: ", fullpath)
+        logging.info("fullpath: %s", fullpath)
         if isdir(fullpath):
-            print("it's folder, there is something wrong!")
+            logging.info("it's folder, there is something wrong!")
             continue
         f = open(fullpath, "r")
         fList = f.readlines()

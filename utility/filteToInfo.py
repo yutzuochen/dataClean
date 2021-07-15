@@ -12,7 +12,7 @@ from utility.util import lastFewMinute
 # return 提煉過的每秒資料 [[此秒,收盤價,最高價,最低價,成交量],[],...,[]]
 def filteToInfo(list, abandonMinute):
     if len(list) <= 0:
-        print("utility/fileteToInfo fileteToInfo's list is empty")
+        logging.warn("utility/fileteToInfo fileteToInfo's list is empty")
         return 
     resList = []
     firstTra = list[0]
