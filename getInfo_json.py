@@ -14,7 +14,7 @@ FolderWant2Write = "D:\dataClean\clean\\" + TarGetStock + "\\test"
 AbandonMinute = 20
 logging.basicConfig(level=logging.DEBUG)
 
-def main(dataFolderPath, tarGetStock, folderWant2Write):
+def main(dataFolderPath, folderWant2Write, tarGetStock):
     t1 = datetime.datetime.now()
     files = listdir(dataFolderPath)
     for file in files:
@@ -39,4 +39,4 @@ def main(dataFolderPath, tarGetStock, folderWant2Write):
     logging.info(t2-t1)
     # 2021/07/14 18:00 實測花了 6.89 秒 
 
-main(DataFolder, TarGetStock, FolderWant2Write)
+main(DataFolder, FolderWant2Write, TarGetStock)
