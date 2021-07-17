@@ -47,19 +47,19 @@ def sequence(dataFolderPath, folderWant2Write):
         logging.info("total cost time: %s", t2-t1)
 
 
-
+# 2021_07_16:寫完這演算法，還沒測過
+# list like: 
 """
-list like:
-[ 
+[
     {"time": "090015", "closingPrice": 325.0, "highPrice": 325.0, "lowPrice": 325.0, "vol": 79000}
     {"time": "090020", "closingPrice": 325.0, "highPrice": 325.0, "lowPrice": 325.0, "vol": 101000}
     {"time": "090025", "closingPrice": 325.5, "highPrice": 325.5, "lowPrice": 325.5, "vol": 47000}
     {"time": "090030", "closingPrice": 325.5, "highPrice": 325.5, "lowPrice": 325.5, "vol": 68000}
 ]
 """
-# q:快線的時間，一般取12  s:慢線的時間，一般取26
+
 @sequence(DataFolder, FolderWant2Write)
-def makeMFI(lis, abandonTime_start, s, q, m):
+def makeBias(lis, abandonTime_start, n):
     # 拿到該股票當日每個時段間的資訊
     if not lis:
         logging.warn("the list is empty!!!")
@@ -69,11 +69,8 @@ def makeMFI(lis, abandonTime_start, s, q, m):
     # 確保每一行格式正確
     length = len(lis[0])
 
-    preList_q = []
-    EMA_s_pre = 0
-    EMA_q_pre = 0
-    DIFaccu = 0
-    MACD_pre = 0
+    TP_pre = 0
+    closingPriceQueue = []
     for line in range(len(lis)):
         # 資料檢查
         periodData = lis[line]
@@ -83,57 +80,26 @@ def makeMFI(lis, abandonTime_start, s, q, m):
         # 載入該交易資料
         periodData_json = json.loads(periodData)
         closingPrice, vol = periodData_json["closingPrice"], periodData_json["vol"]
-        highPrice, lowPrice =  periodData_json["highPrice"], periodData_json["lowPrice"]
+        #highPrice, lowPrice =  periodData_json["highPrice"], periodData_json["lowPrice"]
         
-
-        # 開始計算 MACD 使用到的參數
-        DI = (closingPrice * 2 + closingPrice + highPrice)/4
-        if line < q-1:
-            preList_q.append(DI)
-        elif line == q-1:
-            EMA_s_cur = sum(preList_q)/q
-            preList_q.append(DI)
-            #MACD_pre =
-        elif line < s-1:
-            EMA_s_cur = EMA_s_pre * (s-1) / (s+1) +(DI*2/s+1)
-            preList_q.append(DI)
-            
-        elif line == s-1:
-            EMA_s_cur = EMA_s_pre * (s-1) / (s+1) +(DI*2/s+1)
-            EMA_q_cur = sum(preList_q)/s
-            DIFaccu += EMA_q_cur - EMA_s_cur
-        elif line < s + m-2:
-            EMA_s_cur = EMA_s_pre * (s-1) / (s+1) +(DI*2/s+1)
-            EMA_q_cur = EMA_q_pre * (q-1) / (q+1) +(DI*2/q+1)
-            DIFaccu += EMA_q_cur - EMA_s_cur
-        elif line == s+m-2:
-            EMA_s_cur = EMA_s_pre * (s-1) / (s+1) +(DI*2/s+1)
-            EMA_q_cur = EMA_q_pre * (q-1) / (q+1) +(DI*2/q+1)
-            # 首個 MACD: 9天內DIF總和 ÷ 9 
-            MACD_pre = DIFaccu / m
+        # 開始計算 MFI 的參數
+        closingPriceQueue.append(closingPrice)
+        # n 日前不計算乖離率
+        if len(closingPriceQueue) < n:
+            continue
+        elif len(closingPriceQueue) > n:
+            closingPriceQueue.pop(0)
         else:
-            EMA_s_cur = EMA_s_pre * (s-1) / (s+1) +(DI*2/s+1)
-            EMA_q_cur = EMA_q_pre * (q-1) / (q+1) +(DI*2/q+1)
-            DIF = EMA_q_cur - EMA_s_cur
-            
-            MACD_cur = MACD_pre * (m-1) / (m+1) + DIF * 2/(m+1)
-            OSC = DIF - MACD_cur
-        
-        
-        resList = {"MACD":MACD_cur, "DIF":DIF, "OSC":OSC}
-        EMA_s_pre = EMA_s_cur
-        EMA_q_pre = EMA_q_cur
-        MACD_pre = MACD_cur
+            pass
+        nDayAveragePrice = sum(closingPriceQueue) / n
+        Bias = (closingPrice - nDayAveragePrice) / nDayAveragePrice    
+        # normal situation
+        #Bias = (closingPrice - nDayAveragePrice) / nDayAveragePrice
+
+        # append 的資料格式實例為 {"time":"090110", "Bias":95}
+        resList.append({"time":periodData_json["time"], "Bias":Bias})
+
     return resList
-
-
-
-"""
-MACD 說明
-短線買賣點檢視柱線 OSC ，接近0時為短線買進或賣出訊號。
-當柱線由負轉正時為買進訊號當柱線由正轉負時為賣出訊號。
-
-"""
 
 
 

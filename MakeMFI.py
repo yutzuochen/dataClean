@@ -48,13 +48,17 @@ def sequence(dataFolderPath, folderWant2Write):
 
 
 # 2021_07_16:寫完這演算法，還沒測過
-@sequence(DataFolder, FolderWant2Write)
 # list like: 
-# {"time": "090015", "closingPrice": 325.0, "highPrice": 325.0, "lowPrice": 325.0, "vol": 79000}
-# {"time": "090020", "closingPrice": 325.0, "highPrice": 325.0, "lowPrice": 325.0, "vol": 101000}
-# {"time": "090025", "closingPrice": 325.5, "highPrice": 325.5, "lowPrice": 325.5, "vol": 47000}
-# {"time": "090030", "closingPrice": 325.5, "highPrice": 325.5, "lowPrice": 325.5, "vol": 68000}
+"""
+[
+    {"time": "090015", "closingPrice": 325.0, "highPrice": 325.0, "lowPrice": 325.0, "vol": 79000}
+    {"time": "090020", "closingPrice": 325.0, "highPrice": 325.0, "lowPrice": 325.0, "vol": 101000}
+    {"time": "090025", "closingPrice": 325.5, "highPrice": 325.5, "lowPrice": 325.5, "vol": 47000}
+    {"time": "090030", "closingPrice": 325.5, "highPrice": 325.5, "lowPrice": 325.5, "vol": 68000}
+]
+"""
 
+@sequence(DataFolder, FolderWant2Write)
 def makeMFI(lis, abandonTime_start, n):
     # 拿到該股票當日每個時段間的資訊
     if not lis:
@@ -75,11 +79,11 @@ def makeMFI(lis, abandonTime_start, n):
             return
         # 載入該交易資料
         periodData_json = json.loads(periodData)
-        ClosingPrice, vol = periodData_json["closingPrice"], periodData_json["vol"]
+        closingPrice, vol = periodData_json["closingPrice"], periodData_json["vol"]
         highPrice, lowPrice =  periodData_json["highPrice"], periodData_json["lowPrice"]
         
         # 開始計算 MFI 的參數
-        TP_cur = (highPrice + lowPrice + ClosingPrice) / 3
+        TP_cur = (highPrice + lowPrice + closingPrice) / 3
         MoneyFlow = TP_cur * vol
         # 第一筆資料取得 TP_0 就跳過
         if line == 0:
@@ -119,8 +123,8 @@ def makeMFI(lis, abandonTime_start, n):
             
             # append 的資料格式實例為 {"time":"090110", "MFI":95}
             resList.append({"time":periodData_json["time"], "MFI":MFI})
-
-        return resList
+            TP_pre = TP_cur
+    return resList # yu:這裡可能出錯，回頭來看的時候記得確認
 
 
 
