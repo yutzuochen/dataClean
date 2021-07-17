@@ -71,10 +71,11 @@ def getStock(targetStockCode, list):
 def lastFewMinute(abandonMinute):
     return int(133000) - int(abandonMinute)
 
-def getNextTimeZone(timeZone_pre, period) -> tuple:
+def getNextTimeZone(timeZone_pre, period) -> str:
     nextTimeZone = str(int(timeZone_pre) + period)
+    nextTimeZone = examTimeUnit(nextTimeZone)
     # 避免 "0900" 整數化時，首位數被拔掉
-    if len(nextTimeZone)+1 == len(timeZone_pre):
+    if len(nextTimeZone) + 1 == len(timeZone_pre):
         nextTimeZone = "0" + nextTimeZone
     # 現在時間的格式壞掉了
     if len(nextTimeZone) != len(timeZone_pre):
@@ -82,3 +83,23 @@ def getNextTimeZone(timeZone_pre, period) -> tuple:
         logging.ERROR("[filteToInfo_Json] time unit was broken! nextTimeZone:%s , timeZone_pre:%s", nextTimeZone, timeZone_pre)
         return None
     return nextTimeZone
+def examTimeUnit(time) -> str:
+    """檢查分與秒是否超過60，若有，則進位
+
+    Args:
+        time (str): e.g. 090270  90270 95970 96013
+
+    Returns:
+        str: e.g. 090310
+    """
+    if int(time[-2]) >= 6:
+        # 可能把開頭的0洗掉
+        time = str(int(time) + 100 - 60)
+    #print("Time[-4]: ", time[-4])
+    if int(time[-4]) >= 6:
+        time = str(int(time) + 10000 - 6000)
+    return time
+
+
+#print(examTimeUnit("090270"))
+    

@@ -113,6 +113,8 @@ def filteToInfo_Json(transListInADay, abandonTime_open, abandonTime_end, period)
             #nextTimeZone = getNextTimeZone(now, period)# yu:這裡有問題
             timeZone_pre = nextTimeZone
             nextTimeZone = getNextTimeZone(nextTimeZone, period)# yu:這裡有問題
+            if nextTimeZone == None:
+                return
             #time_pre = nextTimeZone
 
 
@@ -123,5 +125,5 @@ def filteToInfo_Json(transListInADay, abandonTime_open, abandonTime_end, period)
         lowPrice = min(lowPrice, price_now)
         ## 加上這次的交易量
         vol += getVol_int(aTra)
-        time_pre = now
+        #time_pre = now
     return jsonList
