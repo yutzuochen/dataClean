@@ -76,10 +76,14 @@ def filteToInfo_Json(transListInADay, abandonTime_open, abandonTime_end, period)
     highPrice = price_now
     lowPrice = price_now
     vol = 0
-    time_pre = getTimeBySecond(transListInADay[0])
-    nextTimeZone = getNextTimeZone(abandonTime_open, period)
-    if nextTimeZone == None:
-        return
+    #time_pre = getTimeBySecond(transListInADay[0])
+
+    #nextTimeZone_start, nextTimeZone_end = getNextTimeZone(abandonTime_open, period)
+    #nextTimeZone = getNextTimeZone(abandonTime_open, period)
+    # if nextTimeZone == None:
+    #     return
+    nextTimeZone = abandonTime_open
+    timeZone_pre = nextTimeZone
     for line in range(len(transListInADay)):
         aTra = transListInADay[line]
         if aTra == "\n":
@@ -91,11 +95,12 @@ def filteToInfo_Json(transListInADay, abandonTime_open, abandonTime_end, period)
             continue
         # 檢查是否進入下個時區
         ## if yes
-        if now >= nextTimeZone:
+        #if now >= nextTimeZone:
+        while now >= nextTimeZone:
             ### 1.開始結算，把資訊加入最終清單 2.變數歸零 3.設定下個時間區
             info_json = json.dumps(
                 {
-                    "time":time_pre,
+                    "time":timeZone_pre,
                     "closingPrice":price_now,
                     "highPrice":highPrice,
                     "lowPrice":lowPrice,
@@ -104,7 +109,13 @@ def filteToInfo_Json(transListInADay, abandonTime_open, abandonTime_end, period)
             )
             jsonList.append(info_json +  "\n")
             vol = 0
-            nextTimeZone = getNextTimeZone(now, period)
+            highPrice, lowPrice = price_now, price_now
+            #nextTimeZone = getNextTimeZone(now, period)# yu:這裡有問題
+            timeZone_pre = nextTimeZone
+            nextTimeZone = getNextTimeZone(nextTimeZone, period)# yu:這裡有問題
+            #time_pre = nextTimeZone
+
+
         # 開始計算
         price_now = getPrice_float(aTra)
         ## 看現價是否超過最高價或最低價

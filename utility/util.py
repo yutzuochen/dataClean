@@ -71,13 +71,14 @@ def getStock(targetStockCode, list):
 def lastFewMinute(abandonMinute):
     return int(133000) - int(abandonMinute)
 
-def getNextTimeZone(timeZone_pre, period) -> str:
-    nextTimeZone = str(int(timeZone_pre) + int(period))
+def getNextTimeZone(timeZone_pre, period) -> tuple:
+    nextTimeZone = str(int(timeZone_pre) + period)
     # 避免 "0900" 整數化時，首位數被拔掉
-    if len(nextTimeZone) == len(timeZone_pre)+1:
+    if len(nextTimeZone)+1 == len(timeZone_pre):
         nextTimeZone = "0" + nextTimeZone
     # 現在時間的格式壞掉了
     if len(nextTimeZone) != len(timeZone_pre):
-        logging.ERROR("[filteToInfo_Json] time unit was broken!")
+        print("nextTimeZone, timeZone_pre: ", nextTimeZone, "  ", timeZone_pre)
+        logging.ERROR("[filteToInfo_Json] time unit was broken! nextTimeZone:%s , timeZone_pre:%s", nextTimeZone, timeZone_pre)
         return None
     return nextTimeZone
