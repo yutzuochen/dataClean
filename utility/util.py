@@ -71,7 +71,7 @@ def getStock(targetStockCode, list):
 def lastFewMinute(abandonMinute):
     return int(133000) - int(abandonMinute)
 
-def getNextTimeZone(timeZone_pre, period) -> str:
+def getTimeZoneLastSecond(timeZone_pre, period) -> str:
     nextTimeZone = str(int(timeZone_pre) + period)
     nextTimeZone = examTimeUnit(nextTimeZone)
     # 避免 "0900" 整數化時，首位數被拔掉

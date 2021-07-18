@@ -6,7 +6,7 @@ from utility.util import getPrice_float
 from utility.util import getVol_str
 from utility.util import getVol_int
 from utility.util import lastFewMinute
-from utility.util import getNextTimeZone
+from utility.util import getTimeZoneLastSecond
 
 #logging.basicConfig(level=logging.INFO)
 # 202003022330  B00900009800012357155580308.0000000400021590I7273
@@ -76,47 +76,42 @@ def filteToInfo_Json(transListInADay, abandonTime_open, abandonTime_end, period)
     highPrice = price_now
     lowPrice = price_now
     vol = 0
-    #time_pre = getTimeBySecond(transListInADay[0])
-
-    #nextTimeZone_start, nextTimeZone_end = getNextTimeZone(abandonTime_open, period)
-    #nextTimeZone = getNextTimeZone(abandonTime_open, period)
-    # if nextTimeZone == None:
-    #     return
-    nextTimeZone = abandonTime_open
-    timeZone_pre = nextTimeZone
+    # 這個時間區的最末秒數 e.g. 090020 - 090030 中的 090030
+    timeZoneLastSecond = abandonTime_open
+    #timeZone_start = timeZoneLastSecond # yu:這裡有問題
     for line in range(len(transListInADay)):
         aTra = transListInADay[line]
         if aTra == "\n":
             continue
         now = getTimeBySecond(aTra)
         # 放棄前幾秒 and 放棄後幾秒
-        # abandonTime_open: 090220
-        if now < abandonTime_open or now > abandonTime_end:
+        # abandonTime_open e.g. 090220
+        if now <= abandonTime_open or now >= abandonTime_end:
             continue
         # 檢查是否進入下個時區
         ## if yes
-        #if now >= nextTimeZone:
-        while now >= nextTimeZone:
+        while int(now) > int(timeZoneLastSecond):
             ### 1.開始結算，把資訊加入最終清單 2.變數歸零 3.設定下個時間區
-            info_json = json.dumps(
-                {
-                    "time":timeZone_pre,
-                    "closingPrice":price_now,
-                    "highPrice":highPrice,
-                    "lowPrice":lowPrice,
-                    "vol":vol,
-                }
-            )
-            jsonList.append(info_json +  "\n")
+            if int(timeZoneLastSecond) != int(abandonTime_open):
+                info_json = json.dumps(
+                    {
+                        #"time":timeZone_start,
+                        "time":timeZoneLastSecond,
+                        "closingPrice":price_now,
+                        "highPrice":highPrice,
+                        "lowPrice":lowPrice,
+                        "vol":vol,
+                    }
+                )
+                jsonList.append(info_json +  "\n")
             vol = 0
             highPrice, lowPrice = price_now, price_now
             #nextTimeZone = getNextTimeZone(now, period)# yu:這裡有問題
-            timeZone_pre = nextTimeZone
-            nextTimeZone = getNextTimeZone(nextTimeZone, period)# yu:這裡有問題
-            if nextTimeZone == None:
+            #timeZone_start = timeZoneLastSecond
+            timeZoneLastSecond = getTimeZoneLastSecond(timeZoneLastSecond, period)# yu:這裡有問題
+            if timeZoneLastSecond == None:
                 return
             #time_pre = nextTimeZone
-
 
         # 開始計算
         price_now = getPrice_float(aTra)
@@ -125,5 +120,5 @@ def filteToInfo_Json(transListInADay, abandonTime_open, abandonTime_end, period)
         lowPrice = min(lowPrice, price_now)
         ## 加上這次的交易量
         vol += getVol_int(aTra)
-        #time_pre = now
+        #timeZone_start = 
     return jsonList
