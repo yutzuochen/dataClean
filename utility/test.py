@@ -1,0 +1,66 @@
+from  util import getPrice_float
+from  util import getVol_int
+"""
+          1         2         3         4         5
+012345678901234567890123456789012345678901234567890123456789
+
+"""
+
+data = """202003022330  S01323434601529656N5d4g0311.0000000100012870F8135
+202003022330  B01323434601529656n5hGB0311.0000000100000540F8465
+202003022330  S01323434601529657N5d4g0311.0000000100012870F8135
+202003022330  B01323434601529657K11910311.0000000100004733I7959
+202003022330  S01323434601529658N5d4g0311.0000000100012870F8135
+202003022330  B01323434601529658e19380311.0000000100008743I7038
+202003022330  S01323434601529659N5d4g0311.0000000100012870F8135
+202003022330  B01323434601529659Q85620311.0000000100001100J4045
+202003022330  S01323485001530197n5hH70311.0000000100000546F8465
+202003022330  B01323485001530197S14820311.0000000100005150I084N
+202003022330  S01323485001530198n5hH70311.0000000100000546F8465
+202003022330  B01323485001530198Z14120311.0000000100003160J7A7s
+202003022330  S01323485001530199n76380311.0000000100001140F0075
+202003022330  B01323485001530199F53400311.0000000100005270I701D
+202003022330  S01323485001530200n76380311.0000000100001140F0075
+202003022330  B01323485001530201C58WC0311.0000000100001580I7630
+202003022330  B01323485001530202Q85620311.0000000600001100J4045"""
+
+
+def getInfo(data) -> dict:
+    """test 專用函數，會吐出所有輸入區尖端字串的聯合資訊
+
+    Args:
+        data (str)
+
+    Returns:
+        dict: [dict]
+    """
+    arr = data.split("\n")
+    highPrice = getPrice_float(arr[0])
+    lowPrice = getPrice_float(arr[0])
+    vol = 0
+    for aTra in arr:
+        price = getPrice_float(aTra)
+        highPrice = max(highPrice, price)
+        lowPrice = min(lowPrice, price)
+        vol += getVol_int(aTra)
+    return {"closingPrice": price, "highPrice":highPrice, "lowPrice":lowPrice, "vol": vol}
+    
+
+print(getInfo(data))
+    
+
+
+def getInfoVar(str):
+    date = str[:8]      # Date
+    code = str[8:12]    # Security Code
+    act = str[14]       # Buy or Sell
+    time = str[16:24]   # Trade Time
+    price = str[37:44]  # Trade price
+    vol = str[44:53]    # Trade share
+    
+    print("date: ", date)
+    print("code: ", code)
+    print("act: ", act)
+    print("time: ", time)
+    print("price: ", price)
+    print("vol: ", vol)
