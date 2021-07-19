@@ -3,40 +3,46 @@ from os.path import isfile, isdir, join
 import logging
 from utility.filteToInfo import filteToInfo
 from utility.writeFuc import writeFile
+from utility.util import dumpToJsonList
 import datetime
 import json
 
+logging.basicConfig(level=logging.DEBUG)
 TarGetStock = "2330"
-DataFolder = "D:\dataClean\clean\\" + TarGetStock + "\\timInfo"
+#DataFolder = "D:\dataClean\clean\\" + TarGetStock + "\\timInfo"
+DataFolder = "D:\dataClean\clean\\" + TarGetStock  + "\\test"
 FolderWant2Write = "D:\dataClean\clean\\" + TarGetStock + "\mfi" 
+n = 14
 
-
-def sequence(dataFolderPath, folderWant2Write):
-    def wrap(methodFunc):
+#def sequence(dataFolderPath, folderWant2Write, n):
+def sequence(*args, **kwargs):
+    #print("kwargs: ", kwargs["DataFolder"])
+    dataFolderPath = kwargs["DataFolder"]
+    folderWant2Write = kwargs["FolderWant2Write"]
+    def wrap(methodFunc:list):
         t1 = datetime.datetime.now()
         # read folder
         filesList = listdir(dataFolderPath)
         for file in filesList:
             fullpath = join(dataFolderPath, file)
             # 將 filter 過的清單寫入目標 folder
-            logging.debug("將要讀取的檔案: ", fullpath)
+            #fmt.Println()
+            logging.debug("將要讀取的檔案: %s", fullpath)
             fileToWrite = folderWant2Write + "\\" + file + "_mfi_" # + tarGetStock
-            logging.debug("將要寫入的檔案: ", fileToWrite)
+            logging.debug("將要寫入的檔案: %s", fileToWrite)
             if isdir(fullpath):
                 logging.error("it's folder, there is something wrong!")
                 continue
             # 打開該股票某天的資訊檔案
             f = open(fullpath, "r")
             fList = f.readlines()
-
             
             # Do something
             #MFIlist = makeMFI(fList)
-            MFIlist = methodFunc(fList)
-
-            
-            writeFile(MFIlist, fileToWrite)
-
+            MFIlist = methodFunc(fList, n)
+            #logging.warn("MFIlist: ", MFIjsonList)
+            MFIjsonList = dumpToJsonList(MFIlist)
+            writeFile(MFIjsonList, fileToWrite, folderWant2Write)
             # end
             f.close()
 
@@ -45,7 +51,8 @@ def sequence(dataFolderPath, folderWant2Write):
         logging.info("t1: %s", t1)
         logging.info("t2: %s", t2)
         logging.info("total cost time: %s", t2-t1)
-
+        return 
+    return wrap
 
 # 2021_07_16:寫完這演算法，還沒測過
 # list like: 
@@ -58,26 +65,29 @@ def sequence(dataFolderPath, folderWant2Write):
 ]
 """
 
-@sequence(DataFolder, FolderWant2Write)
-def makeMFI(lis, abandonTime_start, n):
+@sequence(DataFolder = DataFolder, FolderWant2Write= FolderWant2Write, n = n)
+def makeMFI(infoList, n) -> list:
     # 拿到該股票當日每個時段間的資訊
-    if not lis:
+    if not infoList:
         logging.warn("the list is empty!!!")
         return
     resList = []
     
     # 確保每一行格式正確
-    length = len(lis[0])
+    length = len(infoList[0])
 
     TP_pre = 0
     mfQueue = []
-    for line in range(len(lis)):
+    posMF = 0
+    negMF = 0
+    for line in range(len(infoList)):
         # 資料檢查
-        periodData = lis[line]
-        if len(periodData) != length:
-            logging.error("data format in this list is wrong, aTra: ", periodData)
-            return
+        periodData = infoList[line]
+        # if len(periodData) != length:
+        #     logging.error("data format in this list is wrong, aTra: %s", periodData)
+        #     return
         # 載入該交易資料
+        #logging.debug("periodData: %s", periodData)
         periodData_json = json.loads(periodData)
         closingPrice, vol = periodData_json["closingPrice"], periodData_json["vol"]
         highPrice, lowPrice =  periodData_json["highPrice"], periodData_json["lowPrice"]
@@ -131,10 +141,11 @@ def makeMFI(lis, abandonTime_start, n):
 
 
 
+#print(makeMFI())
 
 
 
 # makeMFI(DataFolder, FolderWant2Write, TarGetStock, nDay)
 
 
-#sequnce(DataFolder, FolderWant2Write, TarGetStock, nDay)
+# sequnce(DataFolder, FolderWant2Write, TarGetStock, nDay)

@@ -6,9 +6,11 @@ from utility.writeFuc import writeFile
 import datetime
 import json
 
+logging.basicConfig(level=logging.DEBUG)
 TarGetStock = "2330"
-DataFolder = "D:\dataClean\clean\\" + TarGetStock + "\\timInfo"
-FolderWant2Write = "D:\dataClean\clean\\" + TarGetStock + "\mfi" 
+#DataFolder = "D:\dataClean\clean\\" + TarGetStock + "\\timInfo"
+DataFolder = "D:\dataClean\clean\\" + TarGetStock  + "\\test"
+FolderWant2Write = "D:\dataClean\clean\\" + TarGetStock + "\\bias" 
 
 
 def sequence(dataFolderPath, folderWant2Write):

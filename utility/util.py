@@ -1,4 +1,5 @@
 import logging
+import json
 
 def getInfoVar(str):
     date = str[:8]      # Date
@@ -102,4 +103,19 @@ def examTimeUnit(time) -> str:
 
 
 #print(examTimeUnit("090270"))
+
+def dumpToJsonList(MFIlist) -> list:
+    """將型態為 dict 的元素的 list 轉為型態為 json 格式(str)的 list
+
+    Args:
+        MFIlist (list): 
+
+    Returns:
+        list:
+    """
+    resList = []
+    #logging.debug("MFIlist: %s", MFIlist)
+    for i in MFIlist:
+        resList.append(json.dumps(i) + "\n")
+    return resList
     

@@ -6,7 +6,7 @@ from util import getStock
 # 指定要列出所有檔案的目錄
 #path = "D:\stock_202003"
 
-def readFolderAndWrite(folderPath, folderWant2Write, targetStock, folderToPut):
+def readFolderAndWrite(folderPath, folderWant2Write, targetStock):
   # 取得所有檔案與子目錄名稱
   files = listdir(folderPath)
 
@@ -22,7 +22,7 @@ def readFolderAndWrite(folderPath, folderWant2Write, targetStock, folderToPut):
       stockList = getStock(targetStock, fList)
       # 將 filter 過的清單寫入目標 folder
       fileToWrite = folderWant2Write + "\\" + file + "_" + targetStock
-      writeFile(stockList, fileToWrite, folderToPut)
+      writeFile(stockList, fileToWrite, folderWant2Write)
       f.close()
 
 
