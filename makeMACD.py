@@ -77,9 +77,9 @@ def makeMFI(lis, abandonTime_start, s, q, m):
     for line in range(len(lis)):
         # 資料檢查
         periodData = lis[line]
-        if len(periodData) != length:
-            logging.error("data format in this list is wrong, aTra: ", periodData)
-            return
+        # if len(periodData) != length:
+        #     logging.error("data format in this list is wrong, aTra: ", periodData)
+        #     return
         # 載入該交易資料
         periodData_json = json.loads(periodData)
         closingPrice, vol = periodData_json["closingPrice"], periodData_json["vol"]

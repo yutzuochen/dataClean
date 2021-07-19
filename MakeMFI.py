@@ -1,11 +1,11 @@
-from os import listdir
-from os.path import isfile, isdir, join
 import logging
-from utility.filteToInfo import filteToInfo
-from utility.writeFuc import writeFile
-from utility.util import dumpToJsonList
-import datetime
+#from os.path import isfile, isdir, join
+#from utility.filteToInfo import filteToInfo
+#from utility.writeFuc import writeFile
+#from utility.util import dumpToJsonList
+
 import json
+from utility.util import sequence
 
 logging.basicConfig(level=logging.DEBUG)
 TarGetStock = "2330"
@@ -15,44 +15,6 @@ FolderWant2Write = "D:\dataClean\clean\\" + TarGetStock + "\mfi"
 n = 14
 
 #def sequence(dataFolderPath, folderWant2Write, n):
-def sequence(*args, **kwargs):
-    #print("kwargs: ", kwargs["DataFolder"])
-    dataFolderPath = kwargs["DataFolder"]
-    folderWant2Write = kwargs["FolderWant2Write"]
-    def wrap(methodFunc:list):
-        t1 = datetime.datetime.now()
-        # read folder
-        filesList = listdir(dataFolderPath)
-        for file in filesList:
-            fullpath = join(dataFolderPath, file)
-            # 將 filter 過的清單寫入目標 folder
-            #fmt.Println()
-            logging.debug("將要讀取的檔案: %s", fullpath)
-            fileToWrite = folderWant2Write + "\\" + file + "_mfi_" # + tarGetStock
-            logging.debug("將要寫入的檔案: %s", fileToWrite)
-            if isdir(fullpath):
-                logging.error("it's folder, there is something wrong!")
-                continue
-            # 打開該股票某天的資訊檔案
-            f = open(fullpath, "r")
-            fList = f.readlines()
-            
-            # Do something
-            #MFIlist = makeMFI(fList)
-            MFIlist = methodFunc(fList, n)
-            #logging.warn("MFIlist: ", MFIjsonList)
-            MFIjsonList = dumpToJsonList(MFIlist)
-            writeFile(MFIjsonList, fileToWrite, folderWant2Write)
-            # end
-            f.close()
-
-        # 打印結束時間
-        t2 = datetime.datetime.now()
-        logging.info("t1: %s", t1)
-        logging.info("t2: %s", t2)
-        logging.info("total cost time: %s", t2-t1)
-        return 
-    return wrap
 
 # 2021_07_16:寫完這演算法，還沒測過
 # list like: 

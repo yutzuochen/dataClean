@@ -1,5 +1,9 @@
 import logging
 import json
+import datetime
+from os.path import isdir, join
+from os import listdir
+from utility.writeFuc import writeFile
 
 def getInfoVar(str):
     date = str[:8]      # Date
@@ -114,8 +118,47 @@ def dumpToJsonList(MFIlist) -> list:
         list:
     """
     resList = []
-    #logging.debug("MFIlist: %s", MFIlist)
     for i in MFIlist:
         resList.append(json.dumps(i) + "\n")
     return resList
-    
+
+
+def sequence(*args, **kwargs):
+    #print("kwargs: ", kwargs["DataFolder"])
+    dataFolderPath = kwargs["DataFolder"]
+    folderWant2Write = kwargs["FolderWant2Write"]
+    n = kwargs["n"]
+    def wrap(methodFunc):
+        t1 = datetime.datetime.now()
+        # read folder
+        filesList = listdir(dataFolderPath)
+        for file in filesList:
+            fullpath = join(dataFolderPath, file)
+            # 將 filter 過的清單寫入目標 folder
+            #fmt.Println()
+            logging.debug("將要讀取的檔案: %s", fullpath)
+            fileToWrite = folderWant2Write + "\\" + file + "_bias_" # yu:這裡要更正
+            logging.debug("將要寫入的檔案: %s", fileToWrite)
+            if isdir(fullpath):
+                logging.error("it's folder, there is something wrong!")
+                continue
+            # 打開該股票某天的資訊檔案
+            f = open(fullpath, "r")
+            fList = f.readlines()
+            
+            # Do something
+            #MFIlist = makeMFI(fList)
+            resList = methodFunc(fList, n)
+            #logging.warn("MFIlist: %s", resList)
+            MFIjsonList = dumpToJsonList(resList)
+            writeFile(MFIjsonList, fileToWrite, folderWant2Write)
+            # end
+            f.close()
+
+        # 打印結束時間
+        t2 = datetime.datetime.now()
+        logging.info("t1: %s", t1)
+        logging.info("t2: %s", t2)
+        logging.info("total cost time: %s", t2-t1)
+        return 
+    return wrap
