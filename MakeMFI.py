@@ -1,20 +1,15 @@
 import logging
-#from os.path import isfile, isdir, join
-#from utility.filteToInfo import filteToInfo
-#from utility.writeFuc import writeFile
-#from utility.util import dumpToJsonList
-
 import json
 from utility.util import sequence
 
 logging.basicConfig(level=logging.DEBUG)
+
 TarGetStock = "2330"
 #DataFolder = "D:\dataClean\clean\\" + TarGetStock + "\\timInfo"
 DataFolder = "D:\dataClean\clean\\" + TarGetStock  + "\\test"
 FolderWant2Write = "D:\dataClean\clean\\" + TarGetStock + "\mfi" 
 n = 14
 
-#def sequence(dataFolderPath, folderWant2Write, n):
 
 # 2021_07_16:寫完這演算法，還沒測過
 # list like: 
@@ -35,8 +30,7 @@ def makeMFI(infoList, n) -> list:
         return
     resList = []
     
-    # 確保每一行格式正確
-    length = len(infoList[0])
+
 
     TP_pre = 0
     mfQueue = []

@@ -127,7 +127,7 @@ def sequence(*args, **kwargs):
     #print("kwargs: ", kwargs["DataFolder"])
     dataFolderPath = kwargs["DataFolder"]
     folderWant2Write = kwargs["FolderWant2Write"]
-    n = kwargs["n"]
+    n = kwargs["nPeriod"]
     def wrap(methodFunc):
         t1 = datetime.datetime.now()
         # read folder

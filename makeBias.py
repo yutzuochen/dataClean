@@ -14,41 +14,6 @@ DataFolder = "D:\dataClean\clean\\" + TarGetStock  + "\\test"
 FolderWant2Write = "D:\dataClean\clean\\" + TarGetStock + "\\bias" 
 
 
-# def sequence(dataFolderPath, folderWant2Write):
-#     def wrap(methodFunc):
-#         t1 = datetime.datetime.now()
-#         # read folder
-#         filesList = listdir(dataFolderPath)
-#         for file in filesList:
-#             fullpath = join(dataFolderPath, file)
-#             # 將 filter 過的清單寫入目標 folder
-#             logging.debug("將要讀取的檔案: ", fullpath)
-#             fileToWrite = folderWant2Write + "\\" + file + "_mfi_" # + tarGetStock
-#             logging.debug("將要寫入的檔案: ", fileToWrite)
-#             if isdir(fullpath):
-#                 logging.error("it's folder, there is something wrong!")
-#                 continue
-#             # 打開該股票某天的資訊檔案
-#             f = open(fullpath, "r")
-#             fList = f.readlines()
-
-            
-#             # Do something
-#             #MFIlist = makeMFI(fList)
-#             MFIlist = methodFunc(fList)
-
-            
-#             writeFile(MFIlist, fileToWrite)
-
-#             # end
-#             f.close()
-
-#         # 打印結束時間
-#         t2 = datetime.datetime.now()
-#         logging.info("t1: %s", t1)
-#         logging.info("t2: %s", t2)
-#         logging.info("total cost time: %s", t2-t1)
-
 
 # 2021_07_16:寫完這演算法，還沒測過
 # list like: 
@@ -69,9 +34,7 @@ def makeBias(infoList, n):
         logging.warn("the list is empty!!!")
         return
     resList = []
-    
-    # 確保每一行格式正確
-    length = len(infoList[0])
+
 
     closingPriceQueue = []
     for line in range(len(infoList)):
