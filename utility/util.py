@@ -127,7 +127,10 @@ def sequence(*args, **kwargs):
     #print("kwargs: ", kwargs["DataFolder"])
     dataFolderPath = kwargs["DataFolder"]
     folderWant2Write = kwargs["FolderWant2Write"]
-    n = kwargs["nPeriod"]
+    #n = kwargs["nPeriod"]
+    qPeriod = kwargs["qPeriod"]
+    sPeriod = kwargs["sPeriod"]
+    xPeriod = kwargs["xPeriod"]
     def wrap(methodFunc):
         t1 = datetime.datetime.now()
         # read folder
@@ -148,7 +151,7 @@ def sequence(*args, **kwargs):
             
             # Do something
             #MFIlist = makeMFI(fList)
-            resList = methodFunc(fList, n)
+            resList = methodFunc(fList,qPeriod,sPeriod,xPeriod)
             #logging.warn("MFIlist: %s", resList)
             MFIjsonList = dumpToJsonList(resList)
             writeFile(MFIjsonList, fileToWrite, folderWant2Write)

@@ -41,12 +41,9 @@ def makeKD(lis, nPeriod):
     for line in range(len(lis)):
         # 資料檢查
         periodData = lis[line]
-        # if len(periodData) != length:
-        #     logging.error("data format in this list is wrong, aTra: ", periodData)
-        #     return
         # 載入該交易資料
         periodData_json = json.loads(periodData)
-        closingPrice, vol = periodData_json["closingPrice"], periodData_json["vol"]
+        closingPrice = periodData_json["closingPrice"]
         highPrice, lowPrice =  periodData_json["highPrice"], periodData_json["lowPrice"]
 
         nDayHighPriceQueue.append(highPrice)
@@ -63,7 +60,12 @@ def makeKD(lis, nPeriod):
 
         nDayHighPrice = max(nDayHighPriceQueue)
         nDayLowPrice = min(nDayLowPriceQueue)
-         
+        
+        # print 出現在的計算結果
+        # print("Now: ", periodData_json["time"])
+        # print("closingPrice, nDayLowPrice, nDayHighPrice: ", closingPrice, nDayLowPrice, nDayHighPrice)
+        # print(nDayHighPriceQueue)
+        # print("==================")
         if nDayHighPrice-nDayLowPrice == 0:
             RSV = 0
         else:
