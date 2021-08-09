@@ -138,7 +138,6 @@ def sequence(*args, **kwargs):
         for file in filesList:
             fullpath = join(dataFolderPath, file)
             # 將 filter 過的清單寫入目標 folder
-            #fmt.Println()
             logging.debug("將要讀取的檔案: %s", fullpath)
             fileToWrite = folderWant2Write + "\\" + file + "_bias_" # yu:這裡要更正
             logging.debug("將要寫入的檔案: %s", fileToWrite)
@@ -151,7 +150,7 @@ def sequence(*args, **kwargs):
             
             # Do something
             #MFIlist = makeMFI(fList)
-            resList = methodFunc(fList,qPeriod,sPeriod,xPeriod)
+            resList = methodFunc(fList, qPeriod, sPeriod, xPeriod)
             #logging.warn("MFIlist: %s", resList)
             MFIjsonList = dumpToJsonList(resList)
             writeFile(MFIjsonList, fileToWrite, folderWant2Write)
