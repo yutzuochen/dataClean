@@ -1,3 +1,7 @@
+"""
+
+"""
+
 from os import listdir
 from os.path import isfile, isdir, join
 import logging
@@ -8,9 +12,16 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 TarGetStock = "2330"
+
+### windows ver
 #DataFolder = "D:\dataClean\clean\\" + TarGetStock + "\data"
-DataFolder = "D:\dataClean\\fakaData\\0302"
-FolderWant2Write = "D:\dataClean\clean\\" + TarGetStock + "\\test"
+#DataFolder = "D:\dataClean\\fakaData\\0302"
+#FolderWant2Write = "D:\dataClean\clean\\" + TarGetStock + "\\jsonInfo"
+
+### linux ver
+DataFolder = "/home/mason_chen/Documents/python/dataClean/clean/" + TarGetStock + "/data"
+FolderWant2Write = "/home/mason_chen/Documents/python/dataClean/clean/" + TarGetStock + "/jsonInfo"
+
 # m_s    e.g. 520 : 5分鐘20秒   
 AbandonTime_open = "090040"
 AbandonTime_end = "132400"
@@ -36,7 +47,11 @@ def main(dataFolderPath, folderWant2Write, tarGetStock, abandonTime_open, abando
         # 拿到該股票當日的每秒資訊
         infoList = filteToInfo_Json(fList, abandonTime_open, abandonTime_end, period)
         # 將 filter 過的清單寫入目標 folder
-        fileToWrite = folderWant2Write + "\\" + file + "_Info_" + tarGetStock
+        ## Windows ver
+        # fileToWrite = folderWant2Write + "\\" + file + "_Info_" + tarGetStock
+        ## Linus ver
+        fileToWrite = folderWant2Write + "/" + file + "_Info_" 
+        logging.info("fileToWrite %s: ", fileToWrite)
         writeFile(infoList, fileToWrite, folderWant2Write)
         f.close()
     t2 = datetime.datetime.now()

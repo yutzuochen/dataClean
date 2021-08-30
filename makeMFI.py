@@ -43,7 +43,6 @@ def makeMFI(infoList, n) -> list:
         #     logging.error("data format in this list is wrong, aTra: %s", periodData)
         #     return
         # 載入該交易資料
-        #logging.debug("periodData: %s", periodData)
         periodData_json = json.loads(periodData)
         closingPrice, vol = periodData_json["closingPrice"], periodData_json["vol"]
         highPrice, lowPrice =  periodData_json["highPrice"], periodData_json["lowPrice"]

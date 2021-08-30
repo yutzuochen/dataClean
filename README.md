@@ -5,3 +5,11 @@
 1. 要決定從哪個時間開始計算資訊(abandonTime_open)以及
 哪個時間開始放棄計算資訊(abandonTime_end)
 2. 決定訊息區間的秒數(P)
+
+
+
+
+# 個別的數據放在
+dataClean/clean/2330/timeInfo
+
+# 工具箱放在 utility 資料夾中

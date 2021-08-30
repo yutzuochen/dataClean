@@ -8,7 +8,7 @@ from utility.util import getVol_int
 from utility.util import lastFewMinute
 from utility.util import getTimeZoneLastSecond
 
-#logging.basicConfig(level=logging.INFO)
+# logging.basicConfig(level=logging.INFO)
 # 202003022330  B00900009800012357155580308.0000000400021590I7273
 # return 提煉過的每秒資料 [[此秒,收盤價,最高價,最低價,成交量],[],...,[]]
 def filteToInfo(list, abandonMinute):
@@ -56,7 +56,7 @@ def filteToInfo(list, abandonMinute):
 
 
 def filteToInfo_Json(transListInADay, abandonTime_open, abandonTime_end, period) -> list:
-    """[]
+    """
 
     Args:
         transListInADay (list): [a list contains every transaction for specific stock in a day]
