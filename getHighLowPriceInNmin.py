@@ -1,3 +1,6 @@
+""" 
+提取某筆資料的未來 N 分鐘內的最高最低價
+"""
 from os import listdir
 from os.path import isfile, isdir, join
 import logging
@@ -9,8 +12,8 @@ logging.basicConfig(level=logging.DEBUG)
 
 TarGetStock = "2330"
 #DataFolder = "D:\dataClean\clean\\" + TarGetStock + "\\timInfo"
-DataFolderPath = "D:\dataClean\clean\\" + TarGetStock  + "\\test"
-FolderWant2Write = "D:\dataClean\clean\\" + TarGetStock + "\highLow" 
+DataFolderPath = "C:\Users\mason\Desktop\dataClean" + TarGetStock  + "\\test"
+FolderWant2Write = "C:\Users\mason\Desktop\dataClean" + TarGetStock + "\highLow" 
 nPeriod = 14
 
 

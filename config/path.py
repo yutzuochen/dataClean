@@ -1,4 +1,5 @@
-### getHighLowPriceInNmin
+TarGetStock = "2330"
+### getHighLowPriceInNmin 
 
 DataFolderPath = "D:\dataClean\clean\\" + TarGetStock  + "\\test"
 FolderWant2Write = "D:\dataClean\clean\\" + TarGetStock + "\highLow" 

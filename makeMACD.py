@@ -4,10 +4,10 @@ from utility.util import sequence
 
 logging.basicConfig(level=logging.DEBUG)
 
-TarGetStock = "2330"
-DataFolder = "D:\dataClean\clean\\" + TarGetStock  + "\\test"
-#DataFolder = "D:\dataClean\clean\\" + TarGetStock + "\\timInfo"
-FolderWant2Write = "D:\dataClean\clean\\" + TarGetStock + "\macd"
+# TarGetStock = "2330"
+# DataFolder = "D:\dataClean\clean\\" + TarGetStock  + "\\test"
+# #DataFolder = "D:\dataClean\clean\\" + TarGetStock + "\\timInfo"
+# FolderWant2Write = "D:\dataClean\clean\\" + TarGetStock + "\macd"
 qPeriod = 12
 sPeriod = 26
 xPeriod = 9
