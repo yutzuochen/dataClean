@@ -1,9 +1,11 @@
 import logging
 import json
 import datetime
+
 from os.path import isdir, join
 from os import listdir
-from utility.writeFuc import writeFile
+#from utility.writeFuc import writeFile
+from writeFuc import writeFile
 
 def getInfoVar(str):
     date = str[:8]      # Date
@@ -60,6 +62,7 @@ def getVol_int(str):
 # targetStockCode  目標股票代碼的字串
 # list             一個檔案中的交易清單
 def getStock(targetStockCode, list):
+    logging.info("getStock")
     res = []
     for i in range(len(list)):
         aTra = list[i]

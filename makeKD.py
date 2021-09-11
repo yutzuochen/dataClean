@@ -14,7 +14,7 @@ from utility.util import sequence
 # FolderWant2Write = "D:\dataClean\clean\\" + TarGetStock + "\kd" 
 # nPeriod = 9
 
-# 2021_07_16:寫完這演算法，還沒測過
+
 # list like: 
 """
 [

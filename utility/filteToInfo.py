@@ -9,49 +9,6 @@ from utility.util import lastFewMinute
 from utility.util import getTimeZoneLastSecond
 
 # logging.basicConfig(level=logging.INFO)
-# 202003022330  B00900009800012357155580308.0000000400021590I7273
-# return 提煉過的每秒資料 [[此秒,收盤價,最高價,最低價,成交量],[],...,[]]
-def filteToInfo(list, abandonMinute):
-    if len(list) <= 0:
-        logging.warn("utility/fileteToInfo fileteToInfo's list is empty")
-        return 
-    resList = []
-    firstTra = list[0]
-    preTime = getTimeBySecond(firstTra)
-    price = getPrice_str(firstTra)
-    highPrice = price
-    lowPrice = price
-    vol = 0
-    for line in range(len(list)):
-        aTra = list[line]
-        if aTra == "\n":
-            continue
-
-        now = getTimeBySecond(aTra)
-        
-        # 放棄最後幾分鐘的交易
-        if int(now) > lastFewMinute(now, abandonMinute):
-            break
-
-        if int(now) > int(preTime):
-            # 設定上一刻時間的所有資料  [收盤價,最高價,最低價,成交量]
-            info = preTime + "," + price + "," + highPrice + ","+ lowPrice + "," + str(vol) + "\n"
-            resList.append(info)
-            # 資料重新歸零
-            highPrice = getPrice_str(aTra)
-            lowPrice = highPrice
-            vol = 0
-        
-        price = getPrice_str(aTra)
-        highPrice = max(highPrice, price)
-        lowPrice = min(lowPrice, price)
-        vol += int(getVol_str(aTra))
-        preTime = now
-        
-    # 設定最後一刻的資料
-    info = preTime + "," + price + "," + highPrice + ","+ lowPrice + "," + str(vol)
-    resList.append(info)
-    return resList
 
 
 
@@ -122,3 +79,52 @@ def filteToInfo_Json(transListInADay, abandonTime_open, abandonTime_end, period)
         vol += getVol_int(aTra)
         #timeZone_start = 
     return jsonList
+
+
+
+
+
+    # 202003022330  B00900009800012357155580308.0000000400021590I7273
+# return 提煉過的每秒資料 [[此秒,收盤價,最高價,最低價,成交量],[],...,[]]
+def filteToInfo(list, abandonMinute):
+    if len(list) <= 0:
+        logging.warn("utility/fileteToInfo fileteToInfo's list is empty")
+        return 
+    resList = []
+    firstTra = list[0]
+    preTime = getTimeBySecond(firstTra)
+    price = getPrice_str(firstTra)
+    highPrice = price
+    lowPrice = price
+    vol = 0
+    for line in range(len(list)):
+        aTra = list[line]
+        if aTra == "\n":
+            continue
+
+        now = getTimeBySecond(aTra)
+        
+        # 放棄最後幾分鐘的交易
+        if int(now) > lastFewMinute(now, abandonMinute):
+            break
+
+        if int(now) > int(preTime):
+            # 設定上一刻時間的所有資料  [收盤價,最高價,最低價,成交量]
+            info = preTime + "," + price + "," + highPrice + ","+ lowPrice + "," + str(vol) + "\n"
+            resList.append(info)
+            # 資料重新歸零
+            highPrice = getPrice_str(aTra)
+            lowPrice = highPrice
+            vol = 0
+        
+        price = getPrice_str(aTra)
+        highPrice = max(highPrice, price)
+        lowPrice = min(lowPrice, price)
+        vol += int(getVol_str(aTra))
+        preTime = now
+        
+    # 設定最後一刻的資料
+    info = preTime + "," + price + "," + highPrice + ","+ lowPrice + "," + str(vol)
+    resList.append(info)
+    return resList
+

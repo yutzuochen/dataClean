@@ -10,17 +10,18 @@ from utility.writeFuc import writeFile
 import datetime
 logging.basicConfig(level=logging.DEBUG)
 
+TSMC = "2330" 
+Foxconn = "2317"
 
-TarGetStock = "2330"
+TarGetStock = Foxconn
 
 ### windows ver
-#DataFolder = "D:\dataClean\clean\\" + TarGetStock + "\data"
-#DataFolder = "D:\dataClean\\fakaData\\0302"
-#FolderWant2Write = "D:\dataClean\clean\\" + TarGetStock + "\\jsonInfo"
+DataFolder = "C:\Users\mason\Desktop\dataClean\\" + TarGetStock + "\data"
+FolderWant2Write = "C:\\Users\mason\Desktop\dataClean\clean\\" + TarGetStock + "\\jsonInfo"
 
 ### linux ver
-DataFolder = "/home/mason_chen/Documents/python/dataClean/clean/" + TarGetStock + "/data"
-FolderWant2Write = "/home/mason_chen/Documents/python/dataClean/clean/" + TarGetStock + "/jsonInfo"
+# DataFolder = "/home/mason_chen/Documents/python/dataClean/clean/" + TarGetStock + "/data"
+# FolderWant2Write = "/home/mason_chen/Documents/python/dataClean/clean/" + TarGetStock + "/jsonInfo"
 
 # m_s    e.g. 520 : 5分鐘20秒   
 AbandonTime_open = "090040"
@@ -48,9 +49,10 @@ def main(dataFolderPath, folderWant2Write, tarGetStock, abandonTime_open, abando
         infoList = filteToInfo_Json(fList, abandonTime_open, abandonTime_end, period)
         # 將 filter 過的清單寫入目標 folder
         ## Windows ver
-        # fileToWrite = folderWant2Write + "\\" + file + "_Info_" + tarGetStock
+        fileToWrite = folderWant2Write + "\\" + file + "_Info_" + tarGetStock
         ## Linus ver
-        fileToWrite = folderWant2Write + "/" + file + "_Info_" 
+        #fileToWrite = folderWant2Write + "/" + file + "_Info_" 
+        
         logging.info("fileToWrite %s: ", fileToWrite)
         writeFile(infoList, fileToWrite, folderWant2Write)
         f.close()
