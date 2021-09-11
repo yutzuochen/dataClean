@@ -27,7 +27,8 @@ dataClean/clean/2330/timeInfo
 
 # 20210904 流程
 (零) 從原始資料把特定股票資料萃取出來
-    utility\extractTargetStock.py
+    萃取特定股票 -> utility\extractTargetStock.py  
+    把資訊從資料提出來，並做成 json 檔 -> getInfo_json.py
 
 (一) 把30天的資料取出
 

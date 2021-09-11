@@ -7,12 +7,13 @@ import logging
 import json
 
 from utility.util import sequence
+from constant import Foxconn
 
-# TarGetStock = "2330"
-# # DataFolder = "D:\dataClean\clean\\" + TarGetStock + "\\timInfo"
-# DataFolder = "D:\dataClean\clean\\" + TarGetStock  + "\\test"
-# FolderWant2Write = "D:\dataClean\clean\\" + TarGetStock + "\kd" 
-# nPeriod = 9
+TarGetStock = Foxconn
+# DataFolder = "D:\dataClean\clean\\" + TarGetStock + "\\timInfo"
+DataFolder = "C:\\Users\mason\Desktop\dataClean\clean\\" + TarGetStock  + "\jsonInfo"
+FolderWant2Write = "C:\\Users\mason\Desktop\dataClean\\tech\\" + TarGetStock + "\kd" 
+nPeriod = 9
 
 
 # list like: 

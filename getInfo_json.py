@@ -7,16 +7,18 @@ from os.path import isfile, isdir, join
 import logging
 from utility.filteToInfo import  filteToInfo_Json
 from utility.writeFuc import writeFile
+from constant import Foxconn
 import datetime
+
 logging.basicConfig(level=logging.DEBUG)
 
 TSMC = "2330" 
-Foxconn = "2317"
+#Foxconn = "2317"
 
 TarGetStock = Foxconn
 
 ### windows ver
-DataFolder = "C:\Users\mason\Desktop\dataClean\\" + TarGetStock + "\data"
+DataFolder = "C:\\Users\mason\Desktop\dataClean\clean\\" + TarGetStock + "\data"
 FolderWant2Write = "C:\\Users\mason\Desktop\dataClean\clean\\" + TarGetStock + "\\jsonInfo"
 
 ### linux ver

@@ -1,6 +1,6 @@
 from readFolder import readFolderAndWrite
 import logging
-
+#from constant import Foxconn
 Foxconn = "2317"
 TarGetStock = Foxconn
 DataFolder = "C:\\Users\mason\Documents\stock202003"

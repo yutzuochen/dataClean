@@ -4,8 +4,8 @@ import datetime
 
 from os.path import isdir, join
 from os import listdir
-#from utility.writeFuc import writeFile
 from writeFuc import writeFile
+#from utility.writeFuc import writeFile
 
 def getInfoVar(str):
     date = str[:8]      # Date
