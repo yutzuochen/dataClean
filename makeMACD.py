@@ -64,6 +64,8 @@ def calculateMACD(lis, sPeriod, qPeriod, xPeriod):
     DIFaccu = 0
     MACD_pre = 0
     MACD_cur = None
+    EMA_s_cur = 0
+    EMA_q_cur = 0
     for line in range(len(lis)):
         # 資料檢查
         periodData = lis[line]
@@ -73,15 +75,14 @@ def calculateMACD(lis, sPeriod, qPeriod, xPeriod):
         closingPrice = periodData_json["closingPrice"]
         highPrice, lowPrice =  periodData_json["highPrice"], periodData_json["lowPrice"]
         
-
         # 開始計算 MACD 使用到的參數
         DI = (closingPrice * 2 + lowPrice + highPrice)/4
         if line < qPeriod-1:
             preList_q.append(DI)
+            
         elif line == qPeriod-1:
             EMA_s_cur = sum(preList_q)/qPeriod
             preList_q.append(DI)
-            #MACD_pre =
         elif line < sPeriod-1:
             EMA_s_cur = EMA_s_pre * (sPeriod-1) / (sPeriod+1) +(DI*2/sPeriod+1)
             preList_q.append(DI)
