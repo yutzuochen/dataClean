@@ -1,13 +1,18 @@
+from os import listdir
+from os.path import isdir, join
 import logging
 import json
-from utility.util import sequence
+from utility.util import dumpToJsonList
+from constant import Foxconn
+from utility.writeFuc import writeFile
 
 logging.basicConfig(level=logging.DEBUG)
 
-# TarGetStock = "2330"
-# DataFolder = "D:\dataClean\clean\\" + TarGetStock  + "\\test"
-# #DataFolder = "D:\dataClean\clean\\" + TarGetStock + "\\timInfo"
-# FolderWant2Write = "D:\dataClean\clean\\" + TarGetStock + "\macd"
+
+TarGetStock = Foxconn
+DataFolder = "C:\\Users\mason\Desktop\dataClean\clean\\" + TarGetStock  + "\jsonInfo"
+FolderWant2Write = "C:\\Users\mason\Desktop\dataClean\\tech\\" + TarGetStock + "\macd"
+
 qPeriod = 12
 sPeriod = 26
 xPeriod = 9
@@ -21,9 +26,33 @@ list like:
     {"time": "090030", "closingPrice": 325.5, "highPrice": 325.5, "lowPrice": 325.5, "vol": 68000}
 ]
 """
+
+
 # q:快線的時間，一般取12  s:慢線的時間，一般取26
-@sequence(DataFolder = DataFolder, FolderWant2Write= FolderWant2Write, qPeriod=qPeriod, sPeriod=sPeriod, xPeriod=xPeriod)
-def makeMFI(lis, sPeriiod, qPeriod, xPeriod):
+def makeMACD(dataFolder, folderWant2Write, qPeriod, sPeriod, xPeriod):
+    filesList = listdir(dataFolder)
+    for file in filesList:
+        fullpath = join(dataFolder, file)
+        # 將 filter 過的清單寫入目標 folder
+        logging.debug("將要讀取的檔案: %s", fullpath)
+        fileToWrite = folderWant2Write + "\\" + "_macd_" + file  # yu:這裡要更正
+        logging.debug("將要寫入的檔案: %s", fileToWrite)
+        if isdir(fullpath):
+            logging.error("it's folder, there is something wrong!")
+            continue
+        # 打開該股票某天的資訊檔案
+        f = open(fullpath, "r")
+        fList = f.readlines()
+        
+        # Do something
+        resList = calculateMACD(fList, sPeriod, qPeriod, xPeriod)
+        #logging.warn("resList: %s", resList)
+        macdJsonList = dumpToJsonList(resList)
+        writeFile(macdJsonList, fileToWrite, folderWant2Write)
+        # end
+        f.close()
+
+def calculateMACD(lis, sPeriod, qPeriod, xPeriod):
     # 拿到該股票當日每個時段間的資訊
     if not lis:
         logging.warn("the list is empty!!!")
@@ -53,25 +82,25 @@ def makeMFI(lis, sPeriiod, qPeriod, xPeriod):
             EMA_s_cur = sum(preList_q)/qPeriod
             preList_q.append(DI)
             #MACD_pre =
-        elif line < sPeriiod-1:
-            EMA_s_cur = EMA_s_pre * (sPeriiod-1) / (sPeriiod+1) +(DI*2/sPeriiod+1)
+        elif line < sPeriod-1:
+            EMA_s_cur = EMA_s_pre * (sPeriod-1) / (sPeriod+1) +(DI*2/sPeriod+1)
             preList_q.append(DI)
             
-        elif line == sPeriiod-1:
-            EMA_s_cur = EMA_s_pre * (sPeriiod-1) / (sPeriiod+1) +(DI*2/sPeriiod+1)
-            EMA_q_cur = sum(preList_q)/sPeriiod
+        elif line == sPeriod-1:
+            EMA_s_cur = EMA_s_pre * (sPeriod-1) / (sPeriod+1) +(DI*2/sPeriod+1)
+            EMA_q_cur = sum(preList_q)/sPeriod
             DIFaccu += EMA_q_cur - EMA_s_cur
-        elif line < sPeriiod + xPeriod-2:
-            EMA_s_cur = EMA_s_pre * (sPeriiod-1) / (sPeriiod+1) +(DI*2/sPeriiod+1)
+        elif line < sPeriod + xPeriod-2:
+            EMA_s_cur = EMA_s_pre * (sPeriod-1) / (sPeriod+1) +(DI*2/sPeriod+1)
             EMA_q_cur = EMA_q_pre * (qPeriod-1) / (qPeriod+1) +(DI*2/qPeriod+1)
             DIFaccu += EMA_q_cur - EMA_s_cur
-        elif line == sPeriiod+xPeriod-2:
-            EMA_s_cur = EMA_s_pre * (sPeriiod-1) / (sPeriiod+1) +(DI*2/sPeriiod+1)
+        elif line == sPeriod+xPeriod-2:
+            EMA_s_cur = EMA_s_pre * (sPeriod-1) / (sPeriod+1) +(DI*2/sPeriod+1)
             EMA_q_cur = EMA_q_pre * (qPeriod-1) / (qPeriod+1) +(DI*2/qPeriod+1)
             # 首個 MACD: 9天內DIF總和 ÷ 9 
             MACD_pre = DIFaccu / xPeriod
         else:
-            EMA_s_cur = EMA_s_pre * (sPeriiod-1) / (sPeriiod+1) +(DI*2/sPeriiod+1)
+            EMA_s_cur = EMA_s_pre * (sPeriod-1) / (sPeriod+1) +(DI*2/sPeriod+1)
             EMA_q_cur = EMA_q_pre * (qPeriod-1) / (qPeriod+1) +(DI*2/qPeriod+1)
             DIF = EMA_q_cur - EMA_s_cur
             
@@ -98,6 +127,7 @@ MACD 說明
 """
 
 
+makeMACD(DataFolder, FolderWant2Write, qPeriod, sPeriod, xPeriod)
 
 
 
@@ -105,47 +135,3 @@ MACD 說明
 
 
 
-# makeMFI(DataFolder, FolderWant2Write, TarGetStock, nDay)
-
-
-#sequnce(DataFolder, FolderWant2Write, TarGetStock, nDay)
-
-
-"""
-def sequence(dataFolderPath, folderWant2Write):
-    def wrap(methodFunc):
-        t1 = datetime.datetime.now()
-        # read folder
-        filesList = listdir(dataFolderPath)
-        for file in filesList:
-            fullpath = join(dataFolderPath, file)
-            # 將 filter 過的清單寫入目標 folder
-            logging.debug("將要讀取的檔案: ", fullpath)
-            fileToWrite = folderWant2Write + "\\" + file + "_mfi_" # + tarGetStock
-            logging.debug("將要寫入的檔案: ", fileToWrite)
-            if isdir(fullpath):
-                logging.error("it's folder, there is something wrong!")
-                continue
-            # 打開該股票某天的資訊檔案
-            f = open(fullpath, "r")
-            fList = f.readlines()
-
-            
-            # Do something
-            #MFIlist = makeMFI(fList)
-            MFIlist = methodFunc(fList)
-
-            
-            writeFile(MFIlist, fileToWrite)
-
-            # end
-            f.close()
-
-        # 打印結束時間
-        t2 = datetime.datetime.now()
-        logging.info("t1: %s", t1)
-        logging.info("t2: %s", t2)
-        logging.info("total cost time: %s", t2-t1)
-
-
-"""
