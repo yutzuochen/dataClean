@@ -5,6 +5,7 @@ from utility.writeFuc import writeFile
 import datetime
 import logging
 
+
 TarGetStock = "2330"
 DataFolder = "D:\dataClean\clean\\" + TarGetStock + "\data"
 #FolderWant2Write = "D:\dataClean\clean\\" + TarGetStock + "\\timeInfo"

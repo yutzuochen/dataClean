@@ -1,21 +1,17 @@
 from os import listdir
 from os.path import isfile, isdir, join
 import logging
-#from utility.filteToInfo import filteToInfo
-#from utility.writeFuc import writeFile
-#import datetime
 import json
-
-from utility.util import sequence
+from utility.util import dumpToJsonList
 from constant import Foxconn
+from utility.writeFuc import writeFile
 
 TarGetStock = Foxconn
-# DataFolder = "D:\dataClean\clean\\" + TarGetStock + "\\timInfo"
 DataFolder = "C:\\Users\mason\Desktop\dataClean\clean\\" + TarGetStock  + "\jsonInfo"
 FolderWant2Write = "C:\\Users\mason\Desktop\dataClean\\tech\\" + TarGetStock + "\kd" 
 nPeriod = 9
 
-
+logging.basicConfig(level=logging.DEBUG)
 # list like: 
 """
 [
@@ -26,8 +22,35 @@ nPeriod = 9
 ]
 """
 
-@sequence(DataFolder = DataFolder, FolderWant2Write= FolderWant2Write, nPeriod = nPeriod)
-def makeKD(lis, nPeriod):
+#@sequence(DataFolder = DataFolder, FolderWant2Write= FolderWant2Write, nPeriod = nPeriod)
+def makeKD(dataFolder, folderWant2Write, nPeriod):
+    filesList = listdir(dataFolder)
+    for file in filesList:
+        fullpath = join(dataFolder, file)
+        # 將 filter 過的清單寫入目標 folder
+        logging.debug("將要讀取的檔案: %s", fullpath)
+        fileToWrite = folderWant2Write + "\\" + "_kd_" + file  # yu:這裡要更正
+        logging.debug("將要寫入的檔案: %s", fileToWrite)
+        if isdir(fullpath):
+            logging.error("it's folder, there is something wrong!")
+            continue
+        # 打開該股票某天的資訊檔案
+        f = open(fullpath, "r")
+        fList = f.readlines()
+        
+        # Do something
+        resList = calculateKD(fList, nPeriod)
+        #logging.warn("resList: %s", resList)
+        KDjsonList = dumpToJsonList(resList)
+        writeFile(KDjsonList, fileToWrite, folderWant2Write)
+        # end
+        f.close()
+
+
+"""
+計算其中一天的KD值
+"""
+def calculateKD(lis, nPeriod):
     # 拿到該股票當日每個時段間的資訊
     if not lis:
         logging.warn("the list is empty!!!")
@@ -61,12 +84,7 @@ def makeKD(lis, nPeriod):
 
         nDayHighPrice = max(nDayHighPriceQueue)
         nDayLowPrice = min(nDayLowPriceQueue)
-        
-        # print 出現在的計算結果
-        # print("Now: ", periodData_json["time"])
-        # print("closingPrice, nDayLowPrice, nDayHighPrice: ", closingPrice, nDayLowPrice, nDayHighPrice)
-        # print(nDayHighPriceQueue)
-        # print("==================")
+
         if nDayHighPrice-nDayLowPrice == 0:
             RSV = 0
         else:
@@ -83,20 +101,17 @@ def makeKD(lis, nPeriod):
 
 
 
+makeKD(DataFolder, FolderWant2Write, nPeriod)
 
 
-
-
-
-
-# makeMFI(DataFolder, FolderWant2Write, TarGetStock, nDay)
-
-
-#sequnce(DataFolder, FolderWant2Write, TarGetStock, nDay)
-
-
-
-# def sequence(dataFolderPath, folderWant2Write):
+# def sequence(*args, **kwargs):
+#     #print("kwargs: ", kwargs["DataFolder"])
+#     dataFolderPath = kwargs["DataFolder"]
+#     folderWant2Write = kwargs["FolderWant2Write"]
+#     #n = kwargs["nPeriod"]
+#     qPeriod = kwargs["qPeriod"]
+#     sPeriod = kwargs["sPeriod"]
+#     xPeriod = kwargs["xPeriod"]
 #     def wrap(methodFunc):
 #         t1 = datetime.datetime.now()
 #         # read folder
@@ -104,24 +119,22 @@ def makeKD(lis, nPeriod):
 #         for file in filesList:
 #             fullpath = join(dataFolderPath, file)
 #             # 將 filter 過的清單寫入目標 folder
-#             logging.debug("將要讀取的檔案: ", fullpath)
-#             fileToWrite = folderWant2Write + "\\" + file + "_mfi_" # + tarGetStock
-#             logging.debug("將要寫入的檔案: ", fileToWrite)
+#             logging.debug("將要讀取的檔案: %s", fullpath)
+#             fileToWrite = folderWant2Write + "\\" + file + "_bias_" # yu:這裡要更正
+#             logging.debug("將要寫入的檔案: %s", fileToWrite)
 #             if isdir(fullpath):
 #                 logging.error("it's folder, there is something wrong!")
 #                 continue
 #             # 打開該股票某天的資訊檔案
 #             f = open(fullpath, "r")
 #             fList = f.readlines()
-
             
 #             # Do something
 #             #MFIlist = makeMFI(fList)
-#             MFIlist = methodFunc(fList)
-
-            
-#             writeFile(MFIlist, fileToWrite)
-
+#             resList = methodFunc(fList, qPeriod, sPeriod, xPeriod)
+#             #logging.warn("MFIlist: %s", resList)
+#             MFIjsonList = dumpToJsonList(resList)
+#             writeFile(MFIjsonList, fileToWrite, folderWant2Write)
 #             # end
 #             f.close()
 
@@ -130,3 +143,8 @@ def makeKD(lis, nPeriod):
 #         logging.info("t1: %s", t1)
 #         logging.info("t2: %s", t2)
 #         logging.info("total cost time: %s", t2-t1)
+#         return 
+#     return wrap
+
+
+
