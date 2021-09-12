@@ -1,3 +1,8 @@
+"""
+此文件目前尚未使用
+"""
+
+
 TarGetStock = "2330"
 ### getHighLowPriceInNmin 
 

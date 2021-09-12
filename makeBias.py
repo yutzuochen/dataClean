@@ -5,15 +5,17 @@ from utility.filteToInfo import filteToInfo
 from utility.writeFuc import writeFile
 import datetime
 import json
-from utility.util import sequence
+from utility.util import dumpToJsonList
+from constant import Foxconn
+from utility.writeFuc import writeFile
 
 logging.basicConfig(level=logging.INFO)
-TarGetStock = "2330"
-#DataFolder = "D:\dataClean\clean\\" + TarGetStock + "\\timInfo"
-DataFolder = "D:\dataClean\clean\\" + TarGetStock  + "\\test"
-FolderWant2Write = "D:\dataClean\clean\\" + TarGetStock + "\\bias" 
 
+TarGetStock = Foxconn
+DataFolder = "C:\\Users\mason\Desktop\dataClean\clean\\" + TarGetStock  + "\jsonInfo"
+FolderWant2Write = "C:\\Users\mason\Desktop\dataClean\\tech\\" + TarGetStock + "\\bias" 
 
+nPeriod = 30
 
 # 2021_07_16:寫完這演算法，還沒測過
 # list like: 
@@ -27,8 +29,30 @@ FolderWant2Write = "D:\dataClean\clean\\" + TarGetStock + "\\bias"
 """
 
 # 因之後的演算法中會預測 5 分鐘後的高低價，所以採 n = 5 * 6 = 30
-@sequence(DataFolder = DataFolder, FolderWant2Write= FolderWant2Write, n = 30)
-def makeBias(infoList, n):
+
+def makeBias(dataFolder, folderWant2Write, nPeriod):
+    filesList = listdir(dataFolder)
+    for file in filesList:
+        fullpath = join(dataFolder, file)
+        # 將 filter 過的清單寫入目標 folder
+        logging.debug("將要讀取的檔案: %s", fullpath)
+        fileToWrite = folderWant2Write + "\\" + "_bias_" + file  # yu:這裡要更正
+        logging.debug("將要寫入的檔案: %s", fileToWrite)
+        if isdir(fullpath):
+            logging.error("it's folder, there is something wrong!")
+            continue
+        # 打開該股票某天的資訊檔案
+        f = open(fullpath, "r")
+        fList = f.readlines()
+        
+        # Do something
+        resList = calculateBias(fList, nPeriod)
+        #logging.warn("resList: %s", resList)
+        biasJsonList = dumpToJsonList(resList)
+        writeFile(biasJsonList, fileToWrite, folderWant2Write)
+        # end
+        f.close()
+def calculateBias(infoList, n):
     # 拿到該股票當日每個時段間的資訊
     if not infoList:
         logging.warn("the list is empty!!!")
@@ -70,14 +94,4 @@ def makeBias(infoList, n):
     return resList
 
 
-
-
-
-
-
-
-
-# makeMFI(DataFolder, FolderWant2Write, TarGetStock, nDay)
-
-
-#sequnce(DataFolder, FolderWant2Write, TarGetStock, nDay)
+makeBias(DataFolder, FolderWant2Write, nPeriod)

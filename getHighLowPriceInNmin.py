@@ -1,5 +1,5 @@
 """ 
-提取某筆資料的未來 N 分鐘內的最高最低價
+提取某筆資料的未來 N 分鐘內的最大漲幅與最大跌幅
 """
 from os import listdir
 from os.path import isfile, isdir, join
@@ -7,13 +7,14 @@ import logging
 import json
 from utility.writeFuc import writeFile
 from utility.util import dumpToJsonList
+from constant import Foxconn
 
 logging.basicConfig(level=logging.DEBUG)
 
-TarGetStock = "2330"
-#DataFolder = "D:\dataClean\clean\\" + TarGetStock + "\\timInfo"
-DataFolderPath = "C:\Users\mason\Desktop\dataClean" + TarGetStock  + "\\test"
-FolderWant2Write = "C:\Users\mason\Desktop\dataClean" + TarGetStock + "\highLow" 
+TarGetStock = Foxconn
+
+DataFolderPath = "C:\\Users\mason\Desktop\dataClean\clean\\" + TarGetStock  + "\jsonInfo"
+FolderWant2Write = "C:\\Users\mason\Desktop\dataClean\\tech\\" + TarGetStock + "\highLowPercent" 
 nPeriod = 14
 
 
@@ -45,15 +46,8 @@ def getHighLowPrice(nPeriod, dataFolderPath, folderWant2Write, tarGetStock):
             continue
         f = open(fullpath, "r")
         fList = f.readlines()
-        # 拿到該股票當日的每 x 秒資訊
-        #infoList = filteToInfo(fList, AbandonMinute)
         # 將 filter 過的清單寫入目標 folder
-        
-
-
         for line in range(len(fList)):
-            ### 邏輯
-            
             # 資料檢查
             periodData = fList[line]
             # 載入該交易資料
@@ -61,14 +55,19 @@ def getHighLowPrice(nPeriod, dataFolderPath, folderWant2Write, tarGetStock):
 
             # 檢查後幾個間隔的最高最低價
             h, l = periodData_json["highPrice"],  periodData_json["lowPrice"]
+            price_now = periodData_json["closingPrice"]
             for p in range(1, nPeriod+1):
                 next_json = json.loads(fList[line + p])
                 h = max(h, next_json["highPrice"])
                 l = min(l, next_json["lowPrice"])
+                hPercent = (h - price_now) / price_now
+                lPercent = (price_now - l) / price_now
 
             periodData_json["highPrice"] = h
             periodData_json["lowPrice"] = l
-            print("periodData_json: ", periodData_json)
+            periodData_json["increasePercent"] = hPercent
+            periodData_json["decreasePercent"] = lPercent
+            
             resultList.append(dumpToJsonList(periodData_json))
             ### 寫入檔案
             fileToWrite = folderWant2Write + "\\" + file + "_highlow_" + tarGetStock

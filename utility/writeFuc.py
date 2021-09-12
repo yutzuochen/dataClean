@@ -8,5 +8,6 @@ def writeFile(lists, writeFilePath, folderWant2Write):
         os.makedirs(folderWant2Write)
         logging.debug("make direcotry: %s", folderWant2Write)
     f = open(writeFilePath, "w")
+    logging.DEBUG("lists : %s", lists)
     f.writelines(lists)
     f.close()

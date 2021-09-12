@@ -27,7 +27,7 @@ dataClean/clean/2330/timeInfo
 
 # 20210904 流程
 (零) 從原始資料把特定股票資料萃取出來
-    萃取特定股票 -> utility\extractTargetStock.py  
+將2317資    萃取特定股票 -> utility\extractTargetStock.py  
     把資訊從資料提出來，並做成 json 檔 -> getInfo_json.py
 
 (一) 把30天的資料取出
@@ -41,6 +41,9 @@ dataClean/clean/2330/timeInfo
     3. MFI
     4. Bias
     5. 未來最高最低價 (另外要補百分比)
+
+(二.5)
+    將(二)中做出的資料，同天的整合到一個文件中    
 
 (二) 把數據與資訊放到 google 上，跑出各天裡，每筆數據對應的理論未來最高價(最低)
 

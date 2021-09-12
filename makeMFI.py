@@ -1,13 +1,17 @@
+from os import listdir
+from os.path import isfile, isdir, join
 import logging
 import json
-from utility.util import sequence
+from utility.util import dumpToJsonList
+from constant import Foxconn
+from utility.writeFuc import writeFile
 
 logging.basicConfig(level=logging.DEBUG)
 
-TarGetStock = "2330"
-#DataFolder = "D:\dataClean\clean\\" + TarGetStock + "\\timInfo"
-DataFolder = "D:\dataClean\clean\\" + TarGetStock  + "\\test"
-FolderWant2Write = "D:\dataClean\clean\\" + TarGetStock + "\mfi" 
+TarGetStock = Foxconn
+DataFolder = "C:\\Users\mason\Desktop\dataClean\clean\\" + TarGetStock  + "\jsonInfo"
+FolderWant2Write = "C:\\Users\mason\Desktop\dataClean\\tech\\" + TarGetStock + "\mfi" 
+
 n = 14
 
 
@@ -22,8 +26,32 @@ n = 14
 ]
 """
 
-@sequence(DataFolder = DataFolder, FolderWant2Write= FolderWant2Write, n = n)
-def makeMFI(infoList, n) -> list:
+
+"""
+將目標股票的JSON資訊做成完整的多個檔案，並放入特定資料夾
+"""
+def makeMFI(dataFolder, folderWant2Write, nPeriod):
+    filesList = listdir(dataFolder)
+    for file in filesList:
+        fullpath = join(dataFolder, file)
+        # 將 filter 過的清單寫入目標 folder
+        logging.debug("將要讀取的檔案: %s", fullpath)
+        fileToWrite = folderWant2Write + "\\" + "_mfi_" + file  # yu:這裡要更正
+        logging.debug("將要寫入的檔案: %s", fileToWrite)
+        if isdir(fullpath):
+            logging.error("it's folder, there is something wrong!")
+            continue
+        # 打開該股票某天的資訊檔案
+        f = open(fullpath, "r")
+        fList = f.readlines()
+        
+        # Do something
+        resList = calculateMFI(fList, nPeriod)
+        mfiJsonList = dumpToJsonList(resList)
+        writeFile(mfiJsonList, fileToWrite, folderWant2Write)
+        # end
+        f.close()
+def calculateMFI(infoList, n) -> list:
     # 拿到該股票當日每個時段間的資訊
     if not infoList:
         logging.warn("the list is empty!!!")
@@ -39,9 +67,6 @@ def makeMFI(infoList, n) -> list:
     for line in range(len(infoList)):
         # 資料檢查
         periodData = infoList[line]
-        # if len(periodData) != length:
-        #     logging.error("data format in this list is wrong, aTra: %s", periodData)
-        #     return
         # 載入該交易資料
         periodData_json = json.loads(periodData)
         closingPrice, vol = periodData_json["closingPrice"], periodData_json["vol"]
@@ -94,13 +119,4 @@ def makeMFI(infoList, n) -> list:
 
 
 
-
-
-#print(makeMFI())
-
-
-
-# makeMFI(DataFolder, FolderWant2Write, TarGetStock, nDay)
-
-
-# sequnce(DataFolder, FolderWant2Write, TarGetStock, nDay)
+makeMFI(DataFolder, FolderWant2Write, n)
