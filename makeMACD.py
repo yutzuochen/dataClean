@@ -110,7 +110,7 @@ def calculateMACD(lis, sPeriod, qPeriod, xPeriod):
         
         if MACD_cur != None:
             #resList = {"MACD":MACD_cur, "DIF":DIF, "OSC":OSC}
-            resList.append({"MACD":MACD_cur, "DIF":DIF, "OSC":OSC})
+            resList.append({"time":periodData_json["time"], "MACD":MACD_cur, "DIF":DIF, "OSC":OSC})
             MACD_pre = MACD_cur
         
         EMA_s_pre = EMA_s_cur
