@@ -69,13 +69,9 @@ def getHighLowPrice(nPeriod, dataFolderPath, folderWant2Write, tarGetStock):
             periodData_json["highPrice"] = h
             periodData_json["lowPrice"] = l
             periodData_json["increasePercent"] = hPercent
-            periodData_json["decreasePercent"] = lPercent
-            #print("periodData_json: ", periodData_json)
-            #resultList.append(dumpToJsonList(periodData_json))
+            periodData_json["decreasePercent"] = lPercent    
             hmList.append(periodData_json)
-        #print("hmListL: ", hmList)
         resultList = dumpToJsonList(hmList)
-        #print("resultList: ", resultList)
         ### 寫入檔案
         fileToWrite = folderWant2Write + "\\" + file + "_highlow_" + tarGetStock
         writeFile(resultList, fileToWrite, folderWant2Write)

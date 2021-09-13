@@ -12,8 +12,6 @@ import datetime
 
 logging.basicConfig(level=logging.DEBUG)
 
-TSMC = "2330" 
-#Foxconn = "2317"
 
 TarGetStock = Foxconn
 
@@ -29,9 +27,6 @@ FolderWant2Write = "C:\\Users\mason\Desktop\dataClean\clean\\" + TarGetStock + "
 AbandonTime_open = "090040"
 AbandonTime_end = "132400"
 Period = 10
-#FolderWant2Write = "D:\dataClean\clean\\" + TarGetStock + "\\timeInfo_json"
-#FolderWant2Write = "D:\dataClean\clean\\" + TarGetStock + "\\test\\timeInfo_json"
-
 
 
 def main(dataFolderPath, folderWant2Write, tarGetStock, abandonTime_open, abandonTime_end, period):
