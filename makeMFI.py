@@ -36,7 +36,7 @@ def makeMFI(dataFolder, folderWant2Write, nPeriod):
         fullpath = join(dataFolder, file)
         # 將 filter 過的清單寫入目標 folder
         logging.debug("將要讀取的檔案: %s", fullpath)
-        fileToWrite = folderWant2Write + "\\" + "_mfi_" + file  # yu:這裡要更正
+        fileToWrite = folderWant2Write + "\\"+ file  # yu:這裡要更正
         logging.debug("將要寫入的檔案: %s", fileToWrite)
         if isdir(fullpath):
             logging.error("it's folder, there is something wrong!")
