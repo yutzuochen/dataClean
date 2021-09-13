@@ -46,6 +46,7 @@ def getHighLowPrice(nPeriod, dataFolderPath, folderWant2Write, tarGetStock):
             continue
         f = open(fullpath, "r")
         fList = f.readlines()
+        hmList = []
         # 將 filter 過的清單寫入目標 folder
         for line in range(len(fList)):
             # 資料檢查
@@ -57,6 +58,8 @@ def getHighLowPrice(nPeriod, dataFolderPath, folderWant2Write, tarGetStock):
             h, l = periodData_json["highPrice"],  periodData_json["lowPrice"]
             price_now = periodData_json["closingPrice"]
             for p in range(1, nPeriod+1):
+                if line+p >= len(fList):
+                    break
                 next_json = json.loads(fList[line + p])
                 h = max(h, next_json["highPrice"])
                 l = min(l, next_json["lowPrice"])
@@ -67,13 +70,16 @@ def getHighLowPrice(nPeriod, dataFolderPath, folderWant2Write, tarGetStock):
             periodData_json["lowPrice"] = l
             periodData_json["increasePercent"] = hPercent
             periodData_json["decreasePercent"] = lPercent
-            
-            resultList.append(dumpToJsonList(periodData_json))
-            ### 寫入檔案
-            fileToWrite = folderWant2Write + "\\" + file + "_highlow_" + tarGetStock
-            writeFile(resultList, fileToWrite, folderWant2Write)
+            #print("periodData_json: ", periodData_json)
+            #resultList.append(dumpToJsonList(periodData_json))
+            hmList.append(periodData_json)
+        #print("hmListL: ", hmList)
+        resultList = dumpToJsonList(hmList)
+        #print("resultList: ", resultList)
+        ### 寫入檔案
+        fileToWrite = folderWant2Write + "\\" + file + "_highlow_" + tarGetStock
+        writeFile(resultList, fileToWrite, folderWant2Write)
   
-        
         f.close()
 
         

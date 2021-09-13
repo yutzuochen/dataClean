@@ -111,7 +111,7 @@ def examTimeUnit(time) -> str:
 
 #print(examTimeUnit("090270"))
 
-def dumpToJsonList(MFIlist) -> list:
+def dumpToJsonList(lis) -> list:
     """將型態為 dict 的元素的 list 轉為型態為 json 格式(str)的 list
 
     Args:
@@ -121,7 +121,9 @@ def dumpToJsonList(MFIlist) -> list:
         list:
     """
     resList = []
-    for i in MFIlist:
+    #print("lis: ", lis)
+    for i in lis:
+        #print("i: ", i)
         resList.append(json.dumps(i) + "\n")
     return resList
 
