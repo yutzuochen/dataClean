@@ -64,16 +64,14 @@ def getHighLowPrice(nPeriod, dataFolderPath, folderWant2Write, tarGetStock):
                 h = max(h, next_json["highPrice"])
                 l = min(l, next_json["lowPrice"])
                 hPercent = (h - price_now) / price_now
-                lPercent = (price_now - l) / price_now
+                #lPercent = (price_now - l) / price_now
 
-            periodData_json["highPrice"] = h
-            periodData_json["lowPrice"] = l
-            periodData_json["increasePercent"] = hPercent
-            periodData_json["decreasePercent"] = lPercent    
-            hmList.append(periodData_json)
+ 
+            #hmList.append(periodData_json)
+            hmList.append({"time":periodData_json["time"],"highPrice":h, "increasePercent": hPercent})
         resultList = dumpToJsonList(hmList)
         ### 寫入檔案
-        fileToWrite = folderWant2Write + "\\" + file + "_highlow_" + tarGetStock
+        fileToWrite = folderWant2Write + "\\" + file 
         writeFile(resultList, fileToWrite, folderWant2Write)
   
         f.close()
@@ -83,75 +81,3 @@ def getHighLowPrice(nPeriod, dataFolderPath, folderWant2Write, tarGetStock):
 getHighLowPrice(nPeriod, DataFolderPath, FolderWant2Write, TarGetStock)
 
     
-"""
-    for line in range(len(infoList)):
-        # 資料檢查
-        periodData = infoList[line]
-        # if len(periodData) != length:
-        #     logging.error("data format in this list is wrong, aTra: %s", periodData)
-        #     return
-        # 載入該交易資料
-        #logging.debug("periodData: %s", periodData)
-        periodData_json = json.loads(periodData)
-        closingPrice, vol = periodData_json["closingPrice"], periodData_json["vol"]
-        highPrice, lowPrice =  periodData_json["highPrice"], periodData_json["lowPrice"]
-        
-        # 開始計算 MFI 的參數
-        TP_cur = (highPrice + lowPrice + closingPrice) / 3
-        MoneyFlow = TP_cur * vol
-        # 第一筆資料取得 TP_0 就跳過
-        if line == 0:
-            TP_pre = TP_cur
-            continue
-        
-        else:
-            if len(mfQueue) > n:
-                logging.error("the data queue is encountering something wrong")
-                return
-            # 前幾筆資料還沒累積出 posMF and negMf
-            if len(mfQueue) < n:
-                if  TP_cur > TP_pre:
-                    posMF += MoneyFlow # 過去n日的正金錢流(Positive Money Flow)
-                    mfQueue.append(MoneyFlow)
-                elif TP_cur < TP_pre:
-                    negMF += MoneyFlow #過去n日的負金錢流(Negative Money Flow)
-                    mfQueue.append(-MoneyFlow)
-            else:
-                # 拿掉最先進來的 MF， YU:使用 sliding windows 技巧，你說屌不屌
-                if mfQueue[0] > 0: 
-                    posMF -= mfQueue.pop(0)
-                else:
-                    negMF -= mfQueue.pop(0)
-                if  TP_cur > TP_pre:
-                    posMF += MoneyFlow
-                    mfQueue.append(MoneyFlow)
-                elif TP_cur < TP_pre:
-                    mfQueue.append(-MoneyFlow)
-
-            # 分母不能為 0
-            if negMF == 0:
-                MFI = 100
-            else:
-                MoneyRatio = posMF / negMF
-                MFI = 100 - (100 / (1 + MoneyRatio))
-            
-            # append 的資料格式實例為 {"time":"090110", "MFI":95}
-            resList.append({"time":periodData_json["time"], "MFI":MFI})
-            TP_pre = TP_cur
-    return resList # yu:這裡可能出錯，回頭來看的時候記得確認
-
-
-
-
-
-
-#print(makeMFI())
-
-
-
-# makeMFI(DataFolder, FolderWant2Write, TarGetStock, nDay)
-
-
-# sequnce(DataFolder, FolderWant2Write, TarGetStock, nDay)
-
-"""

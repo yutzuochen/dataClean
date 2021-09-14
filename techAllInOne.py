@@ -23,7 +23,7 @@ tarGetStock = Foxconn
 DataFolder = "C:\\Users\mason\Desktop\dataClean\clean\\" + tarGetStock  + "\jsonInfo"
 FolderWant2Write = "C:\\Users\mason\Desktop\dataClean\\tech\\" + tarGetStock + "\\all" 
 techPath = "C:\\Users\mason\Desktop\dataClean\\tech\\" + tarGetStock + "\\"
-techList = ["bias", "macd", "mfi", "kd"]
+techList = ["bias", "macd", "mfi", "kd", "highLowPercent"]
 
 #kdPath = techPath + "\kd"
 # 依次掃過 kd 檔案的每一天，並把每一刻的資訊與其他技術指標的同一時刻資料結合在一起
@@ -47,9 +47,15 @@ def allInOne(dataFolder, folderWant2Write, techPath, techList):
                     hm[data_json["time"]] = data_json
             f.close
         logging.debug("hm: %s", hm)
-        csv_columns = ['time', 'KD','K','D', 'Bias', 'MACD', 'DIF', 'OSC', 'MFI']
+        csv_columns = ['time', 'KD','K','D', 'Bias', 'MACD', 'DIF', 'OSC', 'MFI','highPrice', "increasePercent"]
         # print("folderWant2Write: ", folderWant2Write)
         # print("day: ", day)
+            # periodData_json["highPrice"] = h
+            # periodData_json["lowPrice"] = l
+            # periodData_json["increasePercent"] = hPercent
+            # periodData_json["decreasePercent"] = lPercent   
+
+
         csv_file = folderWant2Write + "\\" + day + ".csv"
 
         # dictionary 轉 list
@@ -69,29 +75,6 @@ def allInOne(dataFolder, folderWant2Write, techPath, techList):
         # 輸出成 LIST
         # for k, v in hm:
         #     file.append()
-
-
-        
+     
 
 allInOne(DataFolder, FolderWant2Write, techPath, techList)
-
-
-
-
-# csv_columns = ['KD','K','D', 'Bias', 'MACD', 'DIF', 'OSC', 'MFI']
-# dict_data = [
-# {'No': 1, 'Name': 'Alex', 'Country': 'India'},
-# {'No': 2, 'Name': 'Ben', 'Country': 'USA'},
-# {'No': 3, 'Name': 'Shri Ram', 'Country': 'India'},
-# {'No': 4, 'Name': 'Smith', 'Country': 'USA'},
-# {'No': 5, 'Name': 'Yuva Raj', 'Country': 'India'},
-# ]
-# csv_file = "Names.csv"
-# try:
-#     with open(csv_file, 'w') as csvfile:
-#         writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
-#         writer.writeheader()
-#         for data in dict_data:
-#             writer.writerow(data)
-# except IOError:
-#     print("I/O error")

@@ -43,7 +43,12 @@ dataClean/clean/2330/timeInfo
     5. 未來最高最低價 (另外要補百分比)
 
 (二.5)
-    將(二)中做出的資料，同天的整合到一個文件中    
+    (1)將(二)中做出的資料，同天的整合到一個文件中  
+        使用 -> dataClean\techAllInOne.py     輸出檔案 -> dataClean\tech\2317\all
+
+    (2)將上面做出來的數據整合到一分資料中 
+        使用 -> dataClean\cleanData2ML.py     輸出檔案 -> dataClean\tech\2317\all\all.csv
+
 
 (二) 把數據與資訊放到 google 上，跑出各天裡，每筆數據對應的理論未來最高價(最低)
 
